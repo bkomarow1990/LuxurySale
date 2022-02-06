@@ -1,0 +1,76 @@
+﻿@model LuxurySale.ViewModels.ProductVM;
+@using LuxurySale.Utilities;
+@{
+    var title = "Create a New Product";
+}
+<div>
+    <form method="post" asp-action="ProductUpset" enctype="multipart/form-data">
+        @if (Model.Product != null)
+        {
+            <input asp-for="Product.Id" hidden>
+            title = "Update Product";
+        }
+
+        <h2 class="mb-3">@title</h2>
+
+        <div class="form-group row">
+            <label asp-for="Product.Name" class="col-4"></label>
+            <input asp-for="Product.Name" class="form-control col-8">
+            <span asp-validation-for="Product.Name" class="offset-4 text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Product.Price" class="col-4"></label>
+            <input asp-for="Product.Price" class="form-control col-8">
+            <span asp-validation-for="Product.Price" class="offset-4 text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Product.CategoryId" class="col-4"></label>
+            <select asp-for="Product.CategoryId" asp-items="@Model.Categories" class="form-control col-8">
+                <option selected disabled>----Select Category----</option>
+            </select>
+            <span asp-validation-for="Product.CategoryId" class="offset-4 text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Product.Description" class="col-4"></label>
+            <textarea asp-for="Product.Description" class="form-control col-8" id="summernote"></textarea>
+            <span asp-validation-for="Product.Description" class="offset-4 text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <label asp-for="Product.Image" class="col-4"></label>
+            <input asp-for="Product.Image" class="form-control col-8" type="file">
+        </div>
+        <div class="form-group row p-3">
+            @if (Model.Product == null || Model.Product.Image == null || Model.Product.Image == null)
+            {
+                <img class="rounded upsert-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/2048px-No_image_available.svg.png" width="100" height="100" />
+            }
+            else
+            {
+                <img class="rounded upsert-image" src='@Constants.productImagesPath@Model.Product.Image' width="100" height="100"/>
+            }
+        </div>
+        <div class="form-group row">
+            <div class="col-6">
+                <input type="submit" id="subm" class="btn btn-success w-100" />
+            </div>
+
+            <div class="col-6">
+                <a asp-action="Index" class="btn btn-dark w-100">Back</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@* Client Validation *@
+
+@section Scripts
+{
+    @{
+        <partial name="_ValidationScriptsPartial.cshtml" />
+    }
+    <script>
+        $(document).ready(function () {
+            $('#summernote').summernote();
+        });
+    </script>
+}
